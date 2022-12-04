@@ -48,13 +48,15 @@ FROM unique_titles
 GROUP BY title
 ORDER BY COUNT DESC;
 
+SELECT * FROM retiring_titles;
+
 --Create Mentorship Eligibility Table
 
 SELECT * FROM employees;
 SELECT * FROM dept_emp;
 SELECT * FROM titles;
 
-SELECT Distinct ON (e.emp_no) e.emp_no,
+SELECT DISTINCT ON (e.emp_no) e.emp_no,
 	e.first_name,
 	e.last_name,
 	e.birth_date,
@@ -71,3 +73,44 @@ WHERE dem.to_date = '9999-01-01'
 AND (e.birth_date BETWEEN '1965-01-01' AND '1965-12-31');
 
 SELECT * FROM mentorship_eligibility;
+
+
+SELECT DISTINCT ON (e.emp_no) e.emp_no,
+	e.first_name,
+	e.last_name,
+	e.birth_date,
+	dem.from_date,
+	dem.to_date,
+	dem.dept_no,
+	ti.title
+INTO dept_eligibility
+FROM employees as e
+	INNER JOIN dept_emp as dem
+	ON (e.emp_no = dem.emp_no)
+	INNER JOIN titles as ti
+	ON (e.emp_no = ti.emp_no)
+WHERE dem.to_date = '9999-01-01'
+AND (e.birth_date BETWEEN '1965-01-01' AND '1965-12-31');
+
+SELECT * FROM dept_eligibility;
+
+SELECT COUNT(dept_no), dept_no
+INTO dept_counts
+FROM dept_eligibility
+GROUP BY dept_no
+ORDER BY COUNT DESC;
+
+SELECT dept_counts.COUNT,
+	departments.dept_name
+INTO dept_names_count
+FROM dept_counts
+	LEFT JOIN departments
+	ON (dept_counts.dept_no = departments.dept_no);
+	
+SELECT * FROM dept_counts;
+
+SELECT * FROM departments;
+
+SELECT * FROM dept_names_count;
+
+SELECT * FROM retire_by_department;
