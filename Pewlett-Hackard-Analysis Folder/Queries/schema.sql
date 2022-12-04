@@ -276,3 +276,25 @@ INNER JOIN dept_emp AS de
 ON (em.emp_no = de.emp_no)
 WHERE de.dept_no = ('d006') or 
 de.dept_no = ('d001');
+
+--Only the sales and management teams v2
+SELECT em.emp_no,
+	em.first_name,
+	em.last_name,
+	de.dept_no
+FROM emp_info as em
+INNER JOIN dept_emp AS de
+ON (em.emp_no = de.emp_no)
+WHERE de.dept_no in ('d001', 'd005')
+
+--Only the sales and management teams v2
+SELECT em.emp_no,
+	em.first_name,
+	em.last_name,
+	departments.dept_name
+FROM emp_info as em
+INNER JOIN dept_emp AS de
+ON (em.emp_no = de.emp_no)
+INNER JOIN departments
+ON departments.dept_no = de.dept_no
+WHERE departments.dept_name in ('Sales', 'Development')
